@@ -1,0 +1,123 @@
+import * as express from "express";
+import {
+  getRole,
+  getRoles,
+  addRole,
+  updateRole,
+  deleteRole,
+} from "./controller";
+import auth from "../../middleware/auth";
+import controllerError from "../../middleware/controllerError";
+const router = express.Router();
+
+router.get("/simple", auth(), function (req, res) {
+  getRoles(null, null, true)
+    .then((list) => {
+      switch (list.status) {
+        case 200:
+          res.status(200).send(list.message);
+          break;
+        default:
+          res.status(list.status).send(list.message);
+          break;
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(500).send("Unexpected Error");
+    });
+});
+
+router.get("/list/:page?/:pattern?", auth(), function (req, res) {
+  getRoles(req.params.pattern, parseInt(req.params.page), false)
+    .then((list) => {
+      switch (list.status) {
+        case 200:
+          res.status(200).send(list.message);
+          break;
+        default:
+          res.status(list.status).send(list.message);
+          break;
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(500).send("Unexpected Error");
+    });
+});
+
+router.get("/:id", auth(), function (req, res) {
+  getRole(req.params.id)
+    .then((list) => {
+      switch (list.status) {
+        case 200:
+          res.status(200).send(list.message);
+          break;
+        default:
+          res.status(list.status).send(list.message);
+          break;
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(500).send("Unexpected Error");
+    });
+});
+
+router.post("/", auth(), function (req, res) {
+  addRole(req.body)
+    .then((role) => {
+      switch (role.status) {
+        case 201:
+          res.status(201).send(role.message);
+          break;
+        default:
+          controllerError(role.detail, req, res);
+          break;
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(500).send("Unexpected Error");
+    });
+});
+
+router.patch("/", auth(), function (req, res) {
+  updateRole(req.body)
+    .then((role) => {
+      switch (role.status) {
+        case 200:
+          res.status(200).send(role.message);
+          break;
+        case 400:
+          res.status(role.status).send(role.message);
+          break;
+        default:
+          controllerError(role.detail, req, res);
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(500).send("Unexpected Error");
+    });
+});
+
+router.delete("/:id", auth(), function (req, res) {
+  deleteRole(req.params.id)
+    .then((resp) => {
+      switch (resp.status) {
+        case 200:
+          res.status(200).send(`Role ${req.params.id} eliminado`);
+          break;
+        case 400:
+          res.status(resp.status).send(resp.message);
+          break;
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(500).send("Unexpected Error");
+    });
+});
+
+export default router;
