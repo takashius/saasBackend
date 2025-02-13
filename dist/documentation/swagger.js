@@ -1,0 +1,160 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const user_1 = __importDefault(require("./user"));
+const company_1 = __importDefault(require("./company"));
+const role_1 = __importDefault(require("./role"));
+const categories_1 = __importDefault(require("./categories"));
+const post_1 = __importDefault(require("./post"));
+const product_1 = __importDefault(require("./product"));
+const plan_1 = __importDefault(require("./plan"));
+const permissions_1 = __importDefault(require("./permissions"));
+const definition = {
+    swagger: "2.0",
+    info: {
+        version: "2.0.0",
+        title: "Detallitos24's API",
+        description: "API for Detallitos24 App",
+        license: {
+            name: "MIT",
+            url: "https://opensource.org/licenses/MIT",
+        },
+    },
+    host: "localhost:5000",
+    servers: [
+        {
+            url: "localhost:5000",
+            description: "Local server",
+        },
+    ],
+    tags: [
+        {
+            name: "Users",
+            description: "User management",
+        },
+        {
+            name: "Company",
+            description: "Company users",
+        },
+        {
+            name: "Role",
+            description: "Roles users",
+        },
+        {
+            name: "Categories",
+            description: "Product categories",
+        },
+        {
+            name: "Posts",
+            description: "Blog posts",
+        },
+        {
+            name: "Products",
+            description: "Products",
+        },
+        {
+            name: "Plan",
+            description: "Planes",
+        },
+        {
+            name: "Permissions",
+            description: "Permissions",
+        },
+    ],
+    consumes: ["application/json"],
+    produces: ["application/json"],
+    paths: {
+        "/user/login": user_1.default.login,
+        "/user/logout": user_1.default.logout,
+        "/user/register": user_1.default.register,
+        "/user/updateRoles": user_1.default.updateRoles,
+        "/user": user_1.default.create,
+        "/user ": user_1.default.update,
+        "/user  ": user_1.default.list,
+        "/user/{id}": user_1.default.userByID,
+        "/user/account": user_1.default.account,
+        "/user/change_password": user_1.default.changePassword,
+        "/user/recovery/{email}": user_1.default.recoveryPass1,
+        "/user/recovery": user_1.default.recoveryPass2,
+        "/user/add_company": user_1.default.addCompany,
+        "/user/select_company": user_1.default.selectCompany,
+        "/user/upload": user_1.default.upload,
+        "/user/del_company": user_1.default.removeCompany,
+        "/company": company_1.default.create,
+        "/company ": company_1.default.update,
+        "/company  ": company_1.default.list,
+        "/company/{id}": company_1.default.companyByID,
+        "/company/{id} ": company_1.default.deleted,
+        "/role/list/{page}/{pattern}": role_1.default.list,
+        "/role/simple": role_1.default.simple,
+        "/role": role_1.default.create,
+        "/role ": role_1.default.update,
+        "/role/{id}": role_1.default.roleByID,
+        "/role/{id} ": role_1.default.deleted,
+        "/categories/list/{page}/{pattern}": categories_1.default.list,
+        "/categories/simple": categories_1.default.simple,
+        "/categories": categories_1.default.create,
+        "/categories ": categories_1.default.update,
+        "/categories/{id}": categories_1.default.categoryByID,
+        "/categories/{id} ": categories_1.default.deleted,
+        "/posts/list/{page}/{pattern}": post_1.default.list,
+        "/posts/simple": post_1.default.simple,
+        "/posts": post_1.default.create,
+        "/posts ": post_1.default.update,
+        "/posts/{id}": post_1.default.postByID,
+        "/posts/{id} ": post_1.default.deleted,
+        "/products/list/{page}/{pattern}": product_1.default.list,
+        "/products/simple": product_1.default.simple,
+        "/products": product_1.default.create,
+        "/products ": product_1.default.update,
+        "/products/{id}": product_1.default.productByID,
+        "/products/{id} ": product_1.default.deleted,
+        "/plan/list/{page}/{pattern}": plan_1.default.list,
+        "/plan/simple": plan_1.default.simple,
+        "/plan": plan_1.default.create,
+        "/plan ": plan_1.default.update,
+        "/plan/{id}": plan_1.default.planByID,
+        "/plan/{id} ": plan_1.default.deleted,
+        "/permission/list/{pattern}": permissions_1.default.list,
+        "/permission": permissions_1.default.create,
+        "/permission ": permissions_1.default.update,
+        "/permission/{id}": permissions_1.default.permissionByID,
+        "/permission/{id} ": permissions_1.default.deleted,
+    },
+    definitions: {
+        User: user_1.default.definitions.User,
+        Users: user_1.default.definitions.Users,
+        ResponseUserLoginData: user_1.default.definitions.ResponseUserLoginData,
+        ResponseUserData: user_1.default.definitions.ResponseUserData,
+        CreatedUser: user_1.default.definitions.CreatedUser,
+        MiniDataUser: user_1.default.definitions.MiniDataUser,
+        ResponseCloudinary: user_1.default.definitions.ResponseCloudinary,
+        Company: company_1.default.definitions.Company,
+        CreatedCompany: company_1.default.definitions.CreatedCompany,
+        ListCompany: company_1.default.definitions.ListCompany,
+        Role: role_1.default.definitions.Role,
+        CreatedRole: role_1.default.definitions.CreatedRole,
+        ListRole: role_1.default.definitions.ListRole,
+        Categories: categories_1.default.definitions.Categories,
+        CreatedCategory: categories_1.default.definitions.CreatedCategory,
+        ListCategory: categories_1.default.definitions.ListCategory,
+        Posts: post_1.default.definitions.Posts,
+        CreatedPost: post_1.default.definitions.CreatedPost,
+        ListPost: post_1.default.definitions.ListPost,
+        Product: product_1.default.definitions.Product,
+        CreatedProduct: product_1.default.definitions.CreatedProduct,
+        ProductForList: product_1.default.definitions.ProductForList,
+        ListProduct: product_1.default.definitions.ListProduct,
+        FormatSimple: role_1.default.definitions.FormatSimple,
+        ListSimple: role_1.default.definitions.ListSimple,
+        Plan: plan_1.default.definitions.Plan,
+        CreatedPlan: plan_1.default.definitions.CreatedPlan,
+        ListPlan: plan_1.default.definitions.ListPlan,
+        Permissions: permissions_1.default.definitions.Permissions,
+        CreatedPermission: permissions_1.default.definitions.CreatedPermission,
+        ListPermission: permissions_1.default.definitions.ListPermission,
+    },
+};
+exports.default = definition;

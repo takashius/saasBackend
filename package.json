@@ -1,11 +1,11 @@
 {
-  "name": "detallitos24-back",
+  "name": "saas-base-back",
   "version": "1.0.0",
-  "description": "Backend for Detallitos24 startup",
+  "description": "Backend for Saas Base",
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node ./dist/index.js",
     "dev": "ts-node-dev --respawn src/index.ts",
     "test": "mocha -r ts-node/register 'test/**/*.test.ts'"
   },
