@@ -29,6 +29,11 @@ server.use(
   })
 );
 
+server.get("/active-response", (req, res) => {
+  const active = true;
+  res.json({ active });
+});
+
 server.use(express.static(config.publicRoute));
 server.use(express.static("./static"));
 registerRoutes(server);

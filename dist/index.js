@@ -25,6 +25,10 @@ server.use("/api-docs", swagger_ui_express_1.serve, (0, swagger_ui_express_1.set
         docExpansion: "none",
     },
 }));
+server.get("/active-response", (req, res) => {
+    const active = true;
+    res.json({ active });
+});
 server.use(express_1.default.static(commons_1.default.publicRoute));
 server.use(express_1.default.static("./static"));
 (0, registerRoutes_1.default)(server);
