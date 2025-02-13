@@ -26,7 +26,7 @@ async function mailer(config, email, name, subject, title, message, type = 1, co
                 {
                     From: {
                         Email: "envios@erdesarrollo.com.ve",
-                        Name: "AdminSchool",
+                        Name: "Saas ErDesarrollo",
                     },
                     To: [
                         {

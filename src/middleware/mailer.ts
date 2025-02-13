@@ -30,7 +30,7 @@ export async function mailer(
         {
           From: {
             Email: "envios@erdesarrollo.com.ve",
-            Name: "AdminSchool",
+            Name: "Saas ErDesarrollo",
           },
           To: [
             {

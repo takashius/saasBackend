@@ -335,7 +335,6 @@ async function recoveryStepOne(mail) {
             };
         }
         const configCrud = await (0, store_2.getCompany)(commons_1.default.companyDefault);
-        console.log("controller->recoveryStepOne->configCrud", configCrud);
         const configCompany = configCrud.message;
         const message = `
     <p>Ha solicitado restaurar su clave de acceso, copia el siguiente código en la pantalla de la aplicación para reestablecer su contraseña.</br>
