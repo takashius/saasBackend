@@ -60,7 +60,15 @@ async function registerRoutes(app) {
                         break;
                 }
             }
-            else {
+            else if (path.split("/").length > 1) {
+                roleName += `_${path.split("/")[1].toUpperCase()}`;
+                title = path
+                    .split("/")[1]
+                    .split(/(?=[A-Z])/)
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ");
+            }
+            else if (path.split("/").length > 2) {
                 roleName += `_${path.split("/")[2].toUpperCase()}`;
                 title = path
                     .split("/")[2]
