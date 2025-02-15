@@ -436,7 +436,7 @@ export async function registerUserPublic(data: any) {
       userData.email,
       `${userData.name}`,
       "Registro Exitoso",
-      "Nuevo registro en el AdminSchool",
+      "Nuevo registro en el sistema",
       message,
       2
     );

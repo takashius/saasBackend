@@ -427,7 +427,7 @@ async function registerUserPublic(data) {
         if (user.status !== 201) {
             return user;
         }
-        (0, mailer_1.mailer)(configCompany, userData.email, `${userData.name}`, "Registro Exitoso", "Nuevo registro en el AdminSchool", message, 2);
+        (0, mailer_1.mailer)(configCompany, userData.email, `${userData.name}`, "Registro Exitoso", "Nuevo registro en el sistema", message, 2);
         return {
             status: 201,
             message: {
