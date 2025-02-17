@@ -21,6 +21,7 @@ exports.selectCompany = selectCompany;
 exports.recoveryStepOne = recoveryStepOne;
 exports.recoveryStepTwo = recoveryStepTwo;
 exports.uploadImage = uploadImage;
+exports.getRoles = getRoles;
 exports.updateUserRoles = updateUserRoles;
 const model_1 = require("./model");
 const model_2 = __importDefault(require("../company/model"));
@@ -621,6 +622,22 @@ async function uploadImage(id, file, type) {
         return {
             status: 400,
             message: "An error occurred while updating the user image",
+            detail: e,
+        };
+    }
+}
+async function getRoles() {
+    try {
+        const list = await model_1.Role.find();
+        return {
+            status: 200,
+            message: list,
+        };
+    }
+    catch (e) {
+        return {
+            status: 500,
+            message: "Unexpected error",
             detail: e,
         };
     }

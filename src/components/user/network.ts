@@ -18,6 +18,7 @@ import {
   registerUserPublic,
   uploadImage,
   updateUserRoles,
+  getRoles,
 } from "./controller";
 import auth from "../../middleware/auth";
 import controllerError from "../../middleware/controllerError";
@@ -29,6 +30,24 @@ const moduleName = "user";
 
 router.get("/simple", auth(), function (req, res) {
   getUsers(null, null, true)
+    .then((list) => {
+      switch (list.status) {
+        case 200:
+          res.status(200).send(list.message);
+          break;
+        default:
+          res.status(list.status).send(list.message);
+          break;
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(500).send("Unexpected Error");
+    });
+});
+
+router.get("/roles", auth(), function (req, res) {
+  getRoles()
     .then((list) => {
       switch (list.status) {
         case 200:

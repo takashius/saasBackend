@@ -18,25 +18,12 @@ import {
   registerUserPublic as _registerUserPublic,
   updateUserRoles as _updateUserRoles,
   uploadImage as _uploadImage,
+  getRoles as _getRoles,
 } from "./store";
 import config from "../../config/commons";
 import { mailer } from "../../middleware/mailer";
 import { getCompany } from "../company/store";
 import * as validator from "email-validator";
-
-// export async function getUsers(filterUsers: any) {
-//   try {
-//     const result = await _getUsers(filterUsers);
-//     return result;
-//   } catch (e) {
-//     console.log(e);
-//     return {
-//       status: 500,
-//       message: "Unexpected error",
-//       detail: e,
-//     };
-//   }
-// }
 
 export async function getUsers(
   filter: string,
@@ -484,6 +471,23 @@ export async function updateUserRoles(user: string, roles: any) {
     return {
       status: 500,
       message: "Unexpected controller error",
+      detail: e,
+    };
+  }
+}
+
+export async function getRoles() {
+  try {
+    const result = await _getRoles();
+    return {
+      status: result.status,
+      message: result.message,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      status: 500,
+      message: "Unexpected Controller error",
       detail: e,
     };
   }

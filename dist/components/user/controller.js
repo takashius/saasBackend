@@ -44,24 +44,12 @@ exports.recoveryStepTwo = recoveryStepTwo;
 exports.registerUserPublic = registerUserPublic;
 exports.uploadImage = uploadImage;
 exports.updateUserRoles = updateUserRoles;
+exports.getRoles = getRoles;
 const store_1 = require("./store");
 const commons_1 = __importDefault(require("../../config/commons"));
 const mailer_1 = require("../../middleware/mailer");
 const store_2 = require("../company/store");
 const validator = __importStar(require("email-validator"));
-// export async function getUsers(filterUsers: any) {
-//   try {
-//     const result = await _getUsers(filterUsers);
-//     return result;
-//   } catch (e) {
-//     console.log(e);
-//     return {
-//       status: 500,
-//       message: "Unexpected error",
-//       detail: e,
-//     };
-//   }
-// }
 async function getUsers(filter, page, simple, user) {
     try {
         if (!page || page < 1) {
@@ -473,6 +461,23 @@ async function updateUserRoles(user, roles) {
         return {
             status: 500,
             message: "Unexpected controller error",
+            detail: e,
+        };
+    }
+}
+async function getRoles() {
+    try {
+        const result = await (0, store_1.getRoles)();
+        return {
+            status: result.status,
+            message: result.message,
+        };
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            status: 500,
+            message: "Unexpected Controller error",
             detail: e,
         };
     }

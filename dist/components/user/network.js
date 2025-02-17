@@ -50,6 +50,23 @@ router.get("/simple", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
+router.get("/roles", (0, auth_1.default)(), function (req, res) {
+    (0, controller_1.getRoles)()
+        .then((list) => {
+        switch (list.status) {
+            case 200:
+                res.status(200).send(list.message);
+                break;
+            default:
+                res.status(list.status).send(list.message);
+                break;
+        }
+    })
+        .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+    });
+});
 router.get("/list/:page?/:pattern?", (0, auth_1.default)(), function (req, res) {
     (0, controller_1.getUsers)(req.params.pattern, parseInt(req.params.page), false, req.user)
         .then((list) => {

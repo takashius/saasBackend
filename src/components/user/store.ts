@@ -679,6 +679,22 @@ export async function uploadImage(
   }
 }
 
+export async function getRoles(): Promise<StoreResponse> {
+  try {
+    const list = await Role.find();
+    return {
+      status: 200,
+      message: list,
+    };
+  } catch (e) {
+    return {
+      status: 500,
+      message: "Unexpected error",
+      detail: e,
+    };
+  }
+}
+
 export async function updateUserRoles(
   userId: string,
   newRoles: string[]
