@@ -206,7 +206,8 @@ async function getPaginate(filter, page, companyId) {
 }
 async function addUser(user, company, file) {
     try {
-        user.photo = file.path;
+        if (file)
+            user.photo = file.path;
         const myUser = new model_1.User(user);
         const { _id, name, lastName, photo, email, date } = myUser;
         myUser.companies.push({

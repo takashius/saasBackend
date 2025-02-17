@@ -207,7 +207,7 @@ export async function addUser(
   file: any
 ): Promise<StoreResponse> {
   try {
-    user.photo = file.path;
+    if (file) user.photo = file.path;
     const myUser = new User(user);
     const { _id, name, lastName, photo, email, date } = myUser;
     myUser.companies.push({
