@@ -46,8 +46,8 @@ router.get("/simple", auth(), function (req, res) {
     });
 });
 
-router.get("/roles", auth(), function (req, res) {
-  getRoles()
+router.get("/roles", auth(), function (req: IGetUserAuthInfoRequest, res) {
+  getRoles(req.user)
     .then((list) => {
       switch (list.status) {
         case 200:

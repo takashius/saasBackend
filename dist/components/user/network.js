@@ -51,7 +51,7 @@ router.get("/simple", (0, auth_1.default)(), function (req, res) {
     });
 });
 router.get("/roles", (0, auth_1.default)(), function (req, res) {
-    (0, controller_1.getRoles)()
+    (0, controller_1.getRoles)(req.user)
         .then((list) => {
         switch (list.status) {
             case 200:

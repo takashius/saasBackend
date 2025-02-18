@@ -476,12 +476,51 @@ export async function updateUserRoles(user: string, roles: any) {
   }
 }
 
-export async function getRoles() {
+export async function getRoles(user: any) {
   try {
+    const userRoles = user.role;
+    const SUPER_ADMIN = "SUPER_ADMIN";
     const result = await _getRoles();
+    const list = result.message;
+
+    if (userRoles.includes(SUPER_ADMIN)) {
+      return {
+        status: 200,
+        message: list.map((role: any) => ({
+          _id: role._id,
+          name: role.name,
+          description: role.description,
+          disabled: false,
+        })),
+      };
+    }
+
+    const response = list
+      .filter((role: any) => {
+        const roleParts = role.name.split("_");
+        const roleModule = roleParts[1];
+        return userRoles.some((userRole: any) =>
+          userRole.includes(`ROLE_${roleModule}`)
+        );
+      })
+      .map((role: any) => {
+        let disabled = true;
+
+        if (userRoles.includes(role.name)) {
+          disabled = false;
+        }
+
+        return {
+          _id: role._id,
+          name: role.name,
+          description: role.description,
+          disabled: disabled && !userRoles.includes(role.name),
+        };
+      });
+
     return {
-      status: result.status,
-      message: result.message,
+      status: 200,
+      message: response,
     };
   } catch (e) {
     console.log(e);
