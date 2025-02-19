@@ -306,9 +306,6 @@ export async function updateUser(user: any, file: any): Promise<StoreResponse> {
     if (user.lastName) {
       foundUser.lastName = user.lastName;
     }
-    if (user.photo) {
-      foundUser.photo = user.photo;
-    }
     if (user.phone) {
       foundUser.phone = user.phone;
     }
@@ -320,6 +317,9 @@ export async function updateUser(user: any, file: any): Promise<StoreResponse> {
     }
     if (user.password) {
       foundUser.password = user.password;
+    }
+    if (user.role) {
+      foundUser.role = user.role;
     }
 
     if (file) {

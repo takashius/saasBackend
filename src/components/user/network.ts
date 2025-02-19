@@ -261,6 +261,32 @@ router.post(
   }
 );
 
+router.post(
+  "/uploadUserImage",
+  upload.single("image"),
+  auth(moduleName),
+  function (req: IGetUserAuthInfoRequest, res) {
+    uploadImage(req.body.userId, req.file, "photo")
+      .then((data) => {
+        switch (data.status) {
+          case 200:
+            res.status(200).send(data.message);
+            break;
+          case 400:
+          case 401:
+            res.status(data.status).send(data.message);
+            break;
+          default:
+            controllerError(data.detail, req, res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
+
 router.delete("/del_company", auth(moduleName), function (req, res) {
   removeCompany(req.body.user, req.body.company)
     .then((resp) => {

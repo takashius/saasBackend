@@ -303,9 +303,6 @@ async function updateUser(user, file) {
         if (user.lastName) {
             foundUser.lastName = user.lastName;
         }
-        if (user.photo) {
-            foundUser.photo = user.photo;
-        }
         if (user.phone) {
             foundUser.phone = user.phone;
         }
@@ -317,6 +314,9 @@ async function updateUser(user, file) {
         }
         if (user.password) {
             foundUser.password = user.password;
+        }
+        if (user.role) {
+            foundUser.role = user.role;
         }
         if (file) {
             if (foundUser.photo) {

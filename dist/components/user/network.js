@@ -232,6 +232,26 @@ router.post("/uploadBanner", saveFile_1.upload.single("image"), (0, auth_1.defau
         res.status(500).send("Unexpected Error");
     });
 });
+router.post("/uploadUserImage", saveFile_1.upload.single("image"), (0, auth_1.default)(moduleName), function (req, res) {
+    (0, controller_1.uploadImage)(req.body.userId, req.file, "photo")
+        .then((data) => {
+        switch (data.status) {
+            case 200:
+                res.status(200).send(data.message);
+                break;
+            case 400:
+            case 401:
+                res.status(data.status).send(data.message);
+                break;
+            default:
+                (0, controllerError_1.default)(data.detail, req, res);
+        }
+    })
+        .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+    });
+});
 router.delete("/del_company", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.removeCompany)(req.body.user, req.body.company)
         .then((resp) => {
