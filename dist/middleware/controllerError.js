@@ -23,6 +23,8 @@ exports.default = (err, req, res) => {
             return (err = handleValidationError(err, res));
         if (err.code && err.code == 11000)
             return (err = handleDuplicateKeyError(err, res));
+        if (err.name === "custom")
+            return res.status(400).send(err.message);
         throw "error";
     }
     catch (err) {

@@ -7,6 +7,7 @@ import { StoreResponse } from "../../types/general";
 import { toUserResponse } from "../../utils/userParser";
 import mongoose from "mongoose";
 import moment from "moment";
+import RoleGroup from "../roles/model";
 
 async function findUser(
   companyId: string | null = null,
@@ -260,8 +261,15 @@ export async function registerUserPublic(
       selected: true,
     });
 
-    const role = await Role.findOne({ name: "PROV_ADMIN" });
-    myUser.role.push(role._id);
+    const provAdminRole = await Role.findOne({ name: "PROV_ADMIN" });
+    const roleGroup = await RoleGroup.findOne({
+      roleName: "PROV_ADMIN",
+    }).populate("roles");
+
+    myUser.role.push(provAdminRole._id);
+    roleGroup.roles.forEach((role) => {
+      myUser.role.push(role._id);
+    });
 
     await myUser.save();
     if (adminUser) {

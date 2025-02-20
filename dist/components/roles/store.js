@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRole = getRole;
 exports.getSimple = getSimple;
@@ -6,7 +9,13 @@ exports.getPaginate = getPaginate;
 exports.addRole = addRole;
 exports.updateRole = updateRole;
 exports.deleteRole = deleteRole;
+exports.createRoleGroup = createRoleGroup;
+exports.addRolesToRoleGroup = addRolesToRoleGroup;
+exports.removeRolesFromRoleGroup = removeRolesFromRoleGroup;
+exports.listRoleGroups = listRoleGroups;
+exports.getRoleGroupById = getRoleGroupById;
 const model_1 = require("../user/model");
+const model_2 = __importDefault(require("./model"));
 async function getRole(id) {
     try {
         let query = {};
@@ -14,6 +23,16 @@ async function getRole(id) {
             query = { _id: id };
         }
         const result = await model_1.Role.findOne(query);
+        if (!result) {
+            return {
+                status: 400,
+                message: "Role not found",
+                detail: {
+                    name: "custom",
+                    message: "Role not found",
+                },
+            };
+        }
         return {
             status: 200,
             message: result,
@@ -114,7 +133,14 @@ async function updateRole(role) {
     try {
         const foundRole = await model_1.Role.findOne({ _id: role._id });
         if (!foundRole) {
-            throw new Error("No role found");
+            return {
+                status: 400,
+                message: "Role not found",
+                detail: {
+                    name: "custom",
+                    message: "Role not found",
+                },
+            };
         }
         if (role.name) {
             foundRole.name = role.name;
@@ -139,9 +165,16 @@ async function deleteRole(id) {
     try {
         const foundRole = await model_1.Role.findOne({ _id: id });
         if (!foundRole) {
-            throw new Error("No role found");
+            return {
+                status: 400,
+                message: "Role not found",
+                detail: {
+                    name: "custom",
+                    message: "Role not found",
+                },
+            };
         }
-        foundRole.deleteOne({ _id: id });
+        await foundRole.deleteOne({ _id: id });
         return { status: 200, message: "Role deleted" };
     }
     catch (e) {
@@ -150,5 +183,140 @@ async function deleteRole(id) {
             message: "Unexpected store error",
             detail: e,
         };
+    }
+}
+async function createRoleGroup(roleParent) {
+    try {
+        const parentRole = await model_1.Role.findOne({ name: roleParent });
+        if (!parentRole) {
+            return {
+                status: 400,
+                message: "No parent role found",
+                detail: {
+                    name: "custom",
+                    message: "roleParent: No parent role found",
+                },
+            };
+        }
+        const relatedRoles = await model_1.Role.find({
+            name: {
+                $in: [
+                    "ROLE_USER_SIMPLE",
+                    "ROLE_USER_UPLOAD",
+                    "ROLE_USER_UPLOADBANNER",
+                    "ROLE_USER_PROFILE",
+                    "ROLE_USER_ACCOUNT",
+                    "ROLE_USER_CHANGE_PASSWORD",
+                    "ROLE_COMPANY_MYCOMPANY",
+                    "ROLE_ROLE_SIMPLE",
+                    "ROLE_ROLE_LIST",
+                    "ROLE_USER_ROLES",
+                    "ROLE_USER_UPLOADUSERIMAGE",
+                ],
+            },
+        });
+        const newRoleGroup = new model_2.default({
+            roleName: parentRole.name,
+            roles: relatedRoles.map((role) => role._id),
+        });
+        await newRoleGroup.save();
+        return { status: 201, message: newRoleGroup };
+    }
+    catch (e) {
+        return {
+            status: 500,
+            message: "RoleGroup registration error",
+            detail: e,
+        };
+    }
+}
+async function addRolesToRoleGroup(roleGroupName, newRoleNames) {
+    try {
+        const roleGroup = await model_2.default.findOne({
+            roleName: roleGroupName,
+        }).populate("roles");
+        if (!roleGroup) {
+            return {
+                status: 400,
+                message: "RoleGroup not found",
+                detail: {
+                    name: "custom",
+                    message: "RoleGroup not found",
+                },
+            };
+        }
+        const newRoles = await model_1.Role.find({ name: { $in: newRoleNames } });
+        const existingRoleIds = roleGroup.roles.map((role) => role._id.toString());
+        const rolesToAdd = newRoles.filter((role) => !existingRoleIds.includes(role._id.toString()));
+        roleGroup.roles.push(...rolesToAdd.map((role) => role._id));
+        await roleGroup.save();
+        return { status: 200, message: roleGroup };
+    }
+    catch (e) {
+        return {
+            status: 500,
+            message: "Error adding roles to RoleGroup",
+            detail: e,
+        };
+    }
+}
+async function removeRolesFromRoleGroup(roleGroupName, roleNamesToRemove) {
+    try {
+        const roleGroup = await model_2.default.findOne({
+            roleName: roleGroupName,
+        }).populate("roles");
+        if (!roleGroup) {
+            return {
+                status: 400,
+                message: "RoleGroup not found",
+                detail: {
+                    name: "custom",
+                    message: "RoleGroup not found",
+                },
+            };
+        }
+        const rolesToRemove = await model_1.Role.find({ name: { $in: roleNamesToRemove } });
+        const roleIdsToRemove = rolesToRemove.map((role) => role._id.toString());
+        roleGroup.roles = roleGroup.roles.filter((role) => !roleIdsToRemove.includes(role._id.toString()));
+        await roleGroup.save();
+        return { status: 200, message: rolesToRemove.map((role) => role.name) };
+    }
+    catch (e) {
+        return {
+            status: 500,
+            message: "Error removing roles from RoleGroup",
+            detail: e,
+        };
+    }
+}
+async function listRoleGroups() {
+    try {
+        const roleGroups = await model_2.default.find({}, "roleName");
+        return {
+            status: 200,
+            message: roleGroups,
+        };
+    }
+    catch (error) {
+        return { status: 500, message: "Unexpected store error", detail: error };
+    }
+}
+async function getRoleGroupById(id) {
+    try {
+        const roleGroup = await model_2.default.findById(id).populate("roles", "name");
+        if (!roleGroup) {
+            return {
+                status: 400,
+                message: "RoleGroup not found",
+                detail: {
+                    name: "custom",
+                    message: "RoleGroup not found",
+                },
+            };
+        }
+        return { status: 200, message: roleGroup };
+    }
+    catch (error) {
+        return { status: 500, message: "Unexpected store error", detail: error };
     }
 }

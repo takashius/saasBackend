@@ -30,6 +30,7 @@ const saveFile_1 = require("../../middleware/saveFile");
 const userParser_1 = require("../../utils/userParser");
 const mongoose_1 = __importDefault(require("mongoose"));
 const moment_1 = __importDefault(require("moment"));
+const model_3 = __importDefault(require("../roles/model"));
 async function findUser(companyId = null, userId = null) {
     try {
         let filter = {
@@ -258,8 +259,14 @@ async function registerUserPublic(request) {
             company: myCompany._id.toString(),
             selected: true,
         });
-        const role = await model_1.Role.findOne({ name: "PROV_ADMIN" });
-        myUser.role.push(role._id);
+        const provAdminRole = await model_1.Role.findOne({ name: "PROV_ADMIN" });
+        const roleGroup = await model_3.default.findOne({
+            roleName: "PROV_ADMIN",
+        }).populate("roles");
+        myUser.role.push(provAdminRole._id);
+        roleGroup.roles.forEach((role) => {
+            myUser.role.push(role._id);
+        });
         await myUser.save();
         if (adminUser) {
             adminUser.companies.push({
