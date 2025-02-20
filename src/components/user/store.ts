@@ -1,5 +1,6 @@
 import { User, Role } from "./model";
 import Company from "../company/model";
+import Plan from "../plan/model";
 import config from "../../config/commons";
 import { removeImage } from "../../middleware/saveFile";
 import { UserResponse, CompanyResponse, RequestUser } from "../../types/users";
@@ -235,6 +236,7 @@ export async function registerUserPublic(
   try {
     const { name, email, password, companyName, docId } = request;
     const myUser = new User({ name, email, password });
+    const plan = await Plan.findOne({ name: "Free" });
     const adminUser = await User.findById(config.userAdmin);
     const companyData: CompanyResponse = {
       name: companyName,
@@ -242,6 +244,9 @@ export async function registerUserPublic(
       rif: docId,
       created: {
         user: myUser._id.toString(),
+      },
+      currentPlan: {
+        plan: plan._id,
       },
     };
     const myCompany = new Company(companyData);

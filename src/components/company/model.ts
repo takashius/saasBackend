@@ -171,10 +171,12 @@ const companySchema = new Schema({
     },
     registrationDate: {
       type: Date,
+      default: Date.now,
       required: [true, "The plan registration date is required."],
     },
     expiryDate: {
       type: Date,
+      default: Date.now,
     },
   },
   planExpiryDate: {

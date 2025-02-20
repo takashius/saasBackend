@@ -50,6 +50,10 @@ export interface UserResponse {
   active: boolean;
 }
 
+export interface CurrentPlan {
+  plan: string | unknown;
+}
+
 export interface CompanyResponse {
   _id?: string;
   name: string;
@@ -58,4 +62,5 @@ export interface CompanyResponse {
   created: {
     user: string;
   };
+  currentPlan: CurrentPlan;
 }

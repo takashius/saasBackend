@@ -25,12 +25,13 @@ exports.getRoles = getRoles;
 exports.updateUserRoles = updateUserRoles;
 const model_1 = require("./model");
 const model_2 = __importDefault(require("../company/model"));
+const model_3 = __importDefault(require("../plan/model"));
 const commons_1 = __importDefault(require("../../config/commons"));
 const saveFile_1 = require("../../middleware/saveFile");
 const userParser_1 = require("../../utils/userParser");
 const mongoose_1 = __importDefault(require("mongoose"));
 const moment_1 = __importDefault(require("moment"));
-const model_3 = __importDefault(require("../roles/model"));
+const model_4 = __importDefault(require("../roles/model"));
 async function findUser(companyId = null, userId = null) {
     try {
         let filter = {
@@ -234,6 +235,7 @@ async function registerUserPublic(request) {
     try {
         const { name, email, password, companyName, docId } = request;
         const myUser = new model_1.User({ name, email, password });
+        const plan = await model_3.default.findOne({ name: "Free" });
         const adminUser = await model_1.User.findById(commons_1.default.userAdmin);
         const companyData = {
             name: companyName,
@@ -241,6 +243,9 @@ async function registerUserPublic(request) {
             rif: docId,
             created: {
                 user: myUser._id.toString(),
+            },
+            currentPlan: {
+                plan: plan._id,
             },
         };
         const myCompany = new model_2.default(companyData);
@@ -260,7 +265,7 @@ async function registerUserPublic(request) {
             selected: true,
         });
         const provAdminRole = await model_1.Role.findOne({ name: "PROV_ADMIN" });
-        const roleGroup = await model_3.default.findOne({
+        const roleGroup = await model_4.default.findOne({
             roleName: "PROV_ADMIN",
         }).populate("roles");
         myUser.role.push(provAdminRole._id);
