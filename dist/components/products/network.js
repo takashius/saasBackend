@@ -32,7 +32,7 @@ const auth_1 = __importDefault(require("../../middleware/auth"));
 const saveFile_1 = require("../../middleware/saveFile");
 const controllerError_1 = __importDefault(require("../../middleware/controllerError"));
 const router = express.Router();
-router.get("/simple", (0, auth_1.default)(), function (req, res) {
+router.get("/simple", (0, auth_1.default)("products"), function (req, res) {
     (0, controller_1.getProducts)(null, null, true)
         .then((list) => {
         switch (list.status) {
@@ -66,7 +66,7 @@ router.get("/featured", function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/list/:page?/:pattern?", (0, auth_1.default)(), function (req, res) {
+router.get("/list/:page?/:pattern?", (0, auth_1.default)("products"), function (req, res) {
     (0, controller_1.getProducts)(req.params.pattern, parseInt(req.params.page), false, req.user)
         .then((list) => {
         switch (list.status) {
@@ -117,7 +117,7 @@ router.get("/category/:id", function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.post("/", (0, auth_1.default)(), saveFile_1.upload.single("image"), function (req, res) {
+router.post("/", (0, auth_1.default)("products"), saveFile_1.upload.single("image"), function (req, res) {
     (0, controller_1.addProduct)(req.body, req.file, req.user, req.user.company)
         .then((post) => {
         switch (post.status) {
@@ -134,7 +134,7 @@ router.post("/", (0, auth_1.default)(), saveFile_1.upload.single("image"), funct
         res.status(500).send("Unexpected Error");
     });
 });
-router.patch("/", (0, auth_1.default)(), saveFile_1.upload.single("image"), function (req, res) {
+router.patch("/", (0, auth_1.default)("products"), saveFile_1.upload.single("image"), function (req, res) {
     (0, controller_1.updateProduct)(req.body, req.file)
         .then((post) => {
         switch (post.status) {
@@ -153,7 +153,7 @@ router.patch("/", (0, auth_1.default)(), saveFile_1.upload.single("image"), func
         res.status(500).send("Unexpected Error");
     });
 });
-router.delete("/:id", (0, auth_1.default)(), function (req, res) {
+router.delete("/:id", (0, auth_1.default)("products"), function (req, res) {
     (0, controller_1.deleteProduct)(req.params.id)
         .then((resp) => {
         switch (resp.status) {
