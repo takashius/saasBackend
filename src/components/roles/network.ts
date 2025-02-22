@@ -14,8 +14,9 @@ import {
 import auth from "../../middleware/auth";
 import controllerError from "../../middleware/controllerError";
 const router = express.Router();
+const moduleName = "role";
 
-router.get("/simple", auth(), function (req, res) {
+router.get("/simple", auth(moduleName), function (req, res) {
   getRoles(null, null, true)
     .then((list) => {
       switch (list.status) {
@@ -33,7 +34,7 @@ router.get("/simple", auth(), function (req, res) {
     });
 });
 
-router.get("/roleGroup", auth(), function (req, res) {
+router.get("/roleGroup", auth(moduleName), function (req, res) {
   listRoleGroups()
     .then((list) => {
       switch (list.status) {
@@ -51,7 +52,7 @@ router.get("/roleGroup", auth(), function (req, res) {
     });
 });
 
-router.get("/list/:page?/:pattern?", auth(), function (req, res) {
+router.get("/list/:page?/:pattern?", auth(moduleName), function (req, res) {
   getRoles(req.params.pattern, parseInt(req.params.page), false)
     .then((list) => {
       switch (list.status) {
@@ -69,7 +70,7 @@ router.get("/list/:page?/:pattern?", auth(), function (req, res) {
     });
 });
 
-router.get("/roleGroup/:id", auth(), function (req, res) {
+router.get("/roleGroup/:id", auth(moduleName), function (req, res) {
   getRoleGroupById(req.params.id)
     .then((list) => {
       switch (list.status) {
@@ -87,7 +88,7 @@ router.get("/roleGroup/:id", auth(), function (req, res) {
     });
 });
 
-router.get("/:id", auth(), function (req, res) {
+router.get("/:id", auth(moduleName), function (req, res) {
   getRole(req.params.id)
     .then((list) => {
       switch (list.status) {
@@ -105,7 +106,7 @@ router.get("/:id", auth(), function (req, res) {
     });
 });
 
-router.post("/", auth(), function (req, res) {
+router.post("/", auth(moduleName), function (req, res) {
   addRole(req.body)
     .then((role) => {
       switch (role.status) {
@@ -123,7 +124,7 @@ router.post("/", auth(), function (req, res) {
     });
 });
 
-router.post("/roleGroup", auth(), function (req, res) {
+router.post("/roleGroup", auth(moduleName), function (req, res) {
   createRoleGroup(req.body.roleParent)
     .then((role) => {
       switch (role.status) {
@@ -141,7 +142,7 @@ router.post("/roleGroup", auth(), function (req, res) {
     });
 });
 
-router.patch("/", auth(), function (req, res) {
+router.patch("/", auth(moduleName), function (req, res) {
   updateRole(req.body)
     .then((role) => {
       switch (role.status) {
@@ -161,7 +162,7 @@ router.patch("/", auth(), function (req, res) {
     });
 });
 
-router.patch("/roleGroup", auth(), function (req, res) {
+router.patch("/roleGroup", auth(moduleName), function (req, res) {
   addRolesToRoleGroup(req.body.roleParent, req.body.roles)
     .then((role) => {
       switch (role.status) {
@@ -179,7 +180,7 @@ router.patch("/roleGroup", auth(), function (req, res) {
     });
 });
 
-router.delete("/:id", auth(), function (req, res) {
+router.delete("/:id", auth(moduleName), function (req, res) {
   deleteRole(req.params.id)
     .then((resp) => {
       switch (resp.status) {
@@ -197,7 +198,7 @@ router.delete("/:id", auth(), function (req, res) {
     });
 });
 
-router.delete("/roleGroup", auth(), function (req, res) {
+router.delete("/roleGroup", auth(moduleName), function (req, res) {
   removeRolesFromRoleGroup(req.body.roleParent, req.body.roles)
     .then((role) => {
       switch (role.status) {

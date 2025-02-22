@@ -31,7 +31,8 @@ const controller_1 = require("./controller");
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const controllerError_1 = __importDefault(require("../../middleware/controllerError"));
 const router = express.Router();
-router.get("/list/:pattern?", (0, auth_1.default)(), function (req, res) {
+const moduleName = "permission";
+router.get("/list/:pattern?", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getPermissions)(req.params.pattern)
         .then((list) => {
         switch (list.status) {
@@ -48,7 +49,7 @@ router.get("/list/:pattern?", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/:id", (0, auth_1.default)(), function (req, res) {
+router.get("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getPermission)(req.params.id)
         .then((permission) => {
         switch (permission.status) {
@@ -65,7 +66,7 @@ router.get("/:id", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.post("/", (0, auth_1.default)(), function (req, res) {
+router.post("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.addPermission)(req.body)
         .then((permission) => {
         switch (permission.status) {
@@ -82,7 +83,7 @@ router.post("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.patch("/", (0, auth_1.default)(), function (req, res) {
+router.patch("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.updatePermission)(req.body)
         .then((permission) => {
         switch (permission.status) {
@@ -101,7 +102,7 @@ router.patch("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.delete("/:id", (0, auth_1.default)(), function (req, res) {
+router.delete("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.deletePermission)(req.params.id)
         .then((resp) => {
         switch (resp.status) {

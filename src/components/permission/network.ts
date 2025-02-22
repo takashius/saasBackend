@@ -9,8 +9,9 @@ import {
 import auth from "../../middleware/auth";
 import controllerError from "../../middleware/controllerError";
 const router = express.Router();
+const moduleName = "permission";
 
-router.get("/list/:pattern?", auth(), function (req, res) {
+router.get("/list/:pattern?", auth(moduleName), function (req, res) {
   getPermissions(req.params.pattern)
     .then((list) => {
       switch (list.status) {
@@ -28,7 +29,7 @@ router.get("/list/:pattern?", auth(), function (req, res) {
     });
 });
 
-router.get("/:id", auth(), function (req, res) {
+router.get("/:id", auth(moduleName), function (req, res) {
   getPermission(req.params.id)
     .then((permission) => {
       switch (permission.status) {
@@ -46,7 +47,7 @@ router.get("/:id", auth(), function (req, res) {
     });
 });
 
-router.post("/", auth(), function (req, res) {
+router.post("/", auth(moduleName), function (req, res) {
   addPermission(req.body)
     .then((permission) => {
       switch (permission.status) {
@@ -64,7 +65,7 @@ router.post("/", auth(), function (req, res) {
     });
 });
 
-router.patch("/", auth(), function (req, res) {
+router.patch("/", auth(moduleName), function (req, res) {
   updatePermission(req.body)
     .then((permission) => {
       switch (permission.status) {
@@ -84,7 +85,7 @@ router.patch("/", auth(), function (req, res) {
     });
 });
 
-router.delete("/:id", auth(), function (req, res) {
+router.delete("/:id", auth(moduleName), function (req, res) {
   deletePermission(req.params.id)
     .then((resp) => {
       switch (resp.status) {

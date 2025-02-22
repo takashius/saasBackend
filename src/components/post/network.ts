@@ -10,8 +10,9 @@ import auth from "../../middleware/auth";
 import { upload } from "../../middleware/saveFile";
 import controllerError from "../../middleware/controllerError";
 const router = express.Router();
+const moduleName = "post";
 
-router.get("/simple", auth("post"), function (req, res) {
+router.get("/simple", auth(moduleName), function (req, res) {
   getPosts(null, null, true)
     .then((list) => {
       switch (list.status) {
@@ -29,7 +30,7 @@ router.get("/simple", auth("post"), function (req, res) {
     });
 });
 
-router.get("/list/:page?/:pattern?", auth("post"), function (req, res) {
+router.get("/list/:page?/:pattern?", auth(moduleName), function (req, res) {
   getPosts(req.params.pattern, parseInt(req.params.page), false)
     .then((list) => {
       switch (list.status) {
@@ -47,7 +48,7 @@ router.get("/list/:page?/:pattern?", auth("post"), function (req, res) {
     });
 });
 
-router.get("/:id", auth("post"), function (req, res) {
+router.get("/:id", auth(moduleName), function (req, res) {
   getPost(req.params.id)
     .then((list) => {
       switch (list.status) {
@@ -67,7 +68,7 @@ router.get("/:id", auth("post"), function (req, res) {
 
 router.post(
   "/",
-  auth("post"),
+  auth(moduleName),
   upload.single("image"),
   function (req: any, res) {
     console.log(req.user);
@@ -89,27 +90,32 @@ router.post(
   }
 );
 
-router.patch("/", auth("post"), upload.single("image"), function (req, res) {
-  updatePost(req.body, req.file)
-    .then((post) => {
-      switch (post.status) {
-        case 200:
-          res.status(200).send(post.message);
-          break;
-        case 400:
-          res.status(post.status).send(post.message);
-          break;
-        default:
-          controllerError(post.detail, req, res);
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).send("Unexpected Error");
-    });
-});
+router.patch(
+  "/",
+  auth(moduleName),
+  upload.single("image"),
+  function (req, res) {
+    updatePost(req.body, req.file)
+      .then((post) => {
+        switch (post.status) {
+          case 200:
+            res.status(200).send(post.message);
+            break;
+          case 400:
+            res.status(post.status).send(post.message);
+            break;
+          default:
+            controllerError(post.detail, req, res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
 
-router.delete("/:id", auth("post"), function (req, res) {
+router.delete("/:id", auth(moduleName), function (req, res) {
   deletePost(req.params.id)
     .then((resp) => {
       switch (resp.status) {

@@ -15,8 +15,9 @@ import { upload } from "../../middleware/saveFile";
 import { v2 as cloudinary } from "cloudinary";
 import config from "../../config/commons";
 import { IGetUserAuthInfoRequest } from "../../types/general";
+const moduleName = "company";
 
-router.get("/", auth(), function (req, res) {
+router.get("/", auth(moduleName), function (req, res) {
   getCompanies()
     .then((list) => {
       switch (list.status) {
@@ -34,25 +35,29 @@ router.get("/", auth(), function (req, res) {
     });
 });
 
-router.get("/myCompany", auth(), function (req: IGetUserAuthInfoRequest, res) {
-  getCompany(req.user.company.toString())
-    .then((data) => {
-      switch (data.status) {
-        case 200:
-          res.status(200).send(data.message);
-          break;
-        default:
-          res.status(data.status).send(data.message);
-          break;
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).send("Unexpected Error");
-    });
-});
+router.get(
+  "/myCompany",
+  auth(moduleName),
+  function (req: IGetUserAuthInfoRequest, res) {
+    getCompany(req.user.company.toString())
+      .then((data) => {
+        switch (data.status) {
+          case 200:
+            res.status(200).send(data.message);
+            break;
+          default:
+            res.status(data.status).send(data.message);
+            break;
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
 
-router.get("/:id", auth(), function (req, res) {
+router.get("/:id", auth(moduleName), function (req, res) {
   getCompany(req.params.id)
     .then((data) => {
       switch (data.status) {
@@ -70,29 +75,33 @@ router.get("/:id", auth(), function (req, res) {
     });
 });
 
-router.post("/", auth(), function (req: IGetUserAuthInfoRequest, res) {
-  addCompany(req.body, req.user._id)
-    .then((data) => {
-      switch (data.status) {
-        case 201:
-          res.status(201).send(data.message);
-          break;
-        default:
-          console.log("DATA", JSON.stringify(data, null, 2));
-          controllerError(data.detail, req, res);
-          break;
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).send("Unexpected Error");
-    });
-});
+router.post(
+  "/",
+  auth(moduleName),
+  function (req: IGetUserAuthInfoRequest, res) {
+    addCompany(req.body, req.user._id)
+      .then((data) => {
+        switch (data.status) {
+          case 201:
+            res.status(201).send(data.message);
+            break;
+          default:
+            console.log("DATA", JSON.stringify(data, null, 2));
+            controllerError(data.detail, req, res);
+            break;
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
 
 router.post(
   "/upload",
   upload.single("image"),
-  auth(),
+  auth(moduleName),
   function (req: IGetUserAuthInfoRequest, res) {
     uploadImage(req.user.company.toString(), req.body.imageType, req.file)
       .then((data) => {
@@ -115,7 +124,7 @@ router.post(
   }
 );
 
-router.patch("/", auth(), function (req, res) {
+router.patch("/", auth(moduleName), function (req, res) {
   updateCompany(req.body)
     .then((data) => {
       switch (data.status) {
@@ -135,28 +144,32 @@ router.patch("/", auth(), function (req, res) {
     });
 });
 
-router.patch("/config", auth(), function (req: IGetUserAuthInfoRequest, res) {
-  configCompany(req.body, req.user.company, req.file)
-    .then((data) => {
-      switch (data.status) {
-        case 200:
-          res.status(200).send(data.message);
-          break;
-        case 400:
-        case 401:
-          res.status(data.status).send(data.message);
-          break;
-        default:
-          controllerError(data.detail, req, res);
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).send("Unexpected Error");
-    });
-});
+router.patch(
+  "/config",
+  auth(moduleName),
+  function (req: IGetUserAuthInfoRequest, res) {
+    configCompany(req.body, req.user.company, req.file)
+      .then((data) => {
+        switch (data.status) {
+          case 200:
+            res.status(200).send(data.message);
+            break;
+          case 400:
+          case 401:
+            res.status(data.status).send(data.message);
+            break;
+          default:
+            controllerError(data.detail, req, res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
 
-router.delete("/removeImage", auth(), function (req, res) {
+router.delete("/removeImage", auth(moduleName), function (req, res) {
   const url = req.body.url.split("/");
   const image = url[url.length - 1].split(".");
   cloudinary.uploader
@@ -165,7 +178,7 @@ router.delete("/removeImage", auth(), function (req, res) {
     .catch((error) => res.json(error));
 });
 
-router.delete("/:id", auth(), function (req, res) {
+router.delete("/:id", auth(moduleName), function (req, res) {
   deleteCompany(req.params.id)
     .then((resp) => {
       switch (resp.status) {

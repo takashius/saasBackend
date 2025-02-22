@@ -31,7 +31,8 @@ const controller_1 = require("./controller");
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const controllerError_1 = __importDefault(require("../../middleware/controllerError"));
 const router = express.Router();
-router.get("/simple", (0, auth_1.default)(), function (req, res) {
+const moduleName = "role";
+router.get("/simple", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getRoles)(null, null, true)
         .then((list) => {
         switch (list.status) {
@@ -48,7 +49,7 @@ router.get("/simple", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/roleGroup", (0, auth_1.default)(), function (req, res) {
+router.get("/roleGroup", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.listRoleGroups)()
         .then((list) => {
         switch (list.status) {
@@ -65,7 +66,7 @@ router.get("/roleGroup", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/list/:page?/:pattern?", (0, auth_1.default)(), function (req, res) {
+router.get("/list/:page?/:pattern?", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getRoles)(req.params.pattern, parseInt(req.params.page), false)
         .then((list) => {
         switch (list.status) {
@@ -82,7 +83,7 @@ router.get("/list/:page?/:pattern?", (0, auth_1.default)(), function (req, res) 
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/roleGroup/:id", (0, auth_1.default)(), function (req, res) {
+router.get("/roleGroup/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getRoleGroupById)(req.params.id)
         .then((list) => {
         switch (list.status) {
@@ -99,7 +100,7 @@ router.get("/roleGroup/:id", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/:id", (0, auth_1.default)(), function (req, res) {
+router.get("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getRole)(req.params.id)
         .then((list) => {
         switch (list.status) {
@@ -116,7 +117,7 @@ router.get("/:id", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.post("/", (0, auth_1.default)(), function (req, res) {
+router.post("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.addRole)(req.body)
         .then((role) => {
         switch (role.status) {
@@ -133,7 +134,7 @@ router.post("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.post("/roleGroup", (0, auth_1.default)(), function (req, res) {
+router.post("/roleGroup", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.createRoleGroup)(req.body.roleParent)
         .then((role) => {
         switch (role.status) {
@@ -150,7 +151,7 @@ router.post("/roleGroup", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.patch("/", (0, auth_1.default)(), function (req, res) {
+router.patch("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.updateRole)(req.body)
         .then((role) => {
         switch (role.status) {
@@ -169,7 +170,7 @@ router.patch("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.patch("/roleGroup", (0, auth_1.default)(), function (req, res) {
+router.patch("/roleGroup", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.addRolesToRoleGroup)(req.body.roleParent, req.body.roles)
         .then((role) => {
         switch (role.status) {
@@ -186,7 +187,7 @@ router.patch("/roleGroup", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.delete("/:id", (0, auth_1.default)(), function (req, res) {
+router.delete("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.deleteRole)(req.params.id)
         .then((resp) => {
         switch (resp.status) {
@@ -203,7 +204,7 @@ router.delete("/:id", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.delete("/roleGroup", (0, auth_1.default)(), function (req, res) {
+router.delete("/roleGroup", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.removeRolesFromRoleGroup)(req.body.roleParent, req.body.roles)
         .then((role) => {
         switch (role.status) {

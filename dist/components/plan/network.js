@@ -31,7 +31,8 @@ const controller_1 = require("./controller");
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const controllerError_1 = __importDefault(require("../../middleware/controllerError"));
 const router = express.Router();
-router.get("/simple", (0, auth_1.default)(), function (req, res) {
+const moduleName = "plan";
+router.get("/simple", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getPlanes)(null, null, true)
         .then((list) => {
         switch (list.status) {
@@ -65,7 +66,7 @@ router.get("/public", function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/list/:page?/:pattern?", (0, auth_1.default)(), function (req, res) {
+router.get("/list/:page?/:pattern?", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getPlanes)(req.params.pattern, parseInt(req.params.page), false)
         .then((list) => {
         switch (list.status) {
@@ -82,7 +83,7 @@ router.get("/list/:page?/:pattern?", (0, auth_1.default)(), function (req, res) 
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/:id", (0, auth_1.default)(), function (req, res) {
+router.get("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getPlan)(req.params.id)
         .then((list) => {
         switch (list.status) {
@@ -99,7 +100,7 @@ router.get("/:id", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.post("/", (0, auth_1.default)(), function (req, res) {
+router.post("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.addPlan)(req.body, req.user, req.user.company)
         .then((plan) => {
         switch (plan.status) {
@@ -116,7 +117,7 @@ router.post("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.patch("/", (0, auth_1.default)(), function (req, res) {
+router.patch("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.updatePlan)(req.body)
         .then((plan) => {
         switch (plan.status) {
@@ -135,7 +136,7 @@ router.patch("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.delete("/:id", (0, auth_1.default)(), function (req, res) {
+router.delete("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.deletePlan)(req.params.id)
         .then((resp) => {
         switch (resp.status) {

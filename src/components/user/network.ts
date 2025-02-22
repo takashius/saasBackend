@@ -28,7 +28,7 @@ import { IGetUserAuthInfoRequest } from "../../types/general";
 
 const moduleName = "user";
 
-router.get("/simple", auth(), function (req, res) {
+router.get("/simple", auth(moduleName), function (req, res) {
   getUsers(null, null, true)
     .then((list) => {
       switch (list.status) {
@@ -46,27 +46,31 @@ router.get("/simple", auth(), function (req, res) {
     });
 });
 
-router.get("/roles", auth(), function (req: IGetUserAuthInfoRequest, res) {
-  getRoles(req.user)
-    .then((list) => {
-      switch (list.status) {
-        case 200:
-          res.status(200).send(list.message);
-          break;
-        default:
-          res.status(list.status).send(list.message);
-          break;
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).send("Unexpected Error");
-    });
-});
+router.get(
+  "/roles",
+  auth(moduleName),
+  function (req: IGetUserAuthInfoRequest, res) {
+    getRoles(req.user)
+      .then((list) => {
+        switch (list.status) {
+          case 200:
+            res.status(200).send(list.message);
+            break;
+          default:
+            res.status(list.status).send(list.message);
+            break;
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
 
 router.get(
   "/list/:page?/:pattern?",
-  auth(),
+  auth(moduleName),
   function (req: IGetUserAuthInfoRequest, res) {
     getUsers(req.params.pattern, parseInt(req.params.page), false, req.user)
       .then((list) => {

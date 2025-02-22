@@ -12,8 +12,9 @@ import auth from "../../middleware/auth";
 import { upload } from "../../middleware/saveFile";
 import controllerError from "../../middleware/controllerError";
 const router = express.Router();
+const moduleName = "products";
 
-router.get("/simple", auth("products"), function (req, res) {
+router.get("/simple", auth(moduleName), function (req, res) {
   getProducts(null, null, true)
     .then((list) => {
       switch (list.status) {
@@ -51,7 +52,7 @@ router.get("/featured", function (req, res) {
 
 router.get(
   "/list/:page?/:pattern?",
-  auth("products"),
+  auth(moduleName),
   function (req: any, res) {
     getProducts(req.params.pattern, parseInt(req.params.page), false, req.user)
       .then((list) => {
@@ -109,7 +110,7 @@ router.get("/category/:id", function (req, res) {
 
 router.post(
   "/",
-  auth("products"),
+  auth(moduleName),
   upload.single("image"),
   function (req: any, res) {
     addProduct(req.body, req.file, req.user, req.user.company)
@@ -132,7 +133,7 @@ router.post(
 
 router.patch(
   "/",
-  auth("products"),
+  auth(moduleName),
   upload.single("image"),
   function (req, res) {
     updateProduct(req.body, req.file)
@@ -155,7 +156,7 @@ router.patch(
   }
 );
 
-router.delete("/:id", auth("products"), function (req, res) {
+router.delete("/:id", auth(moduleName), function (req, res) {
   deleteProduct(req.params.id)
     .then((resp) => {
       switch (resp.status) {

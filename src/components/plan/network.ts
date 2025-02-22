@@ -11,8 +11,9 @@ import auth from "../../middleware/auth";
 import controllerError from "../../middleware/controllerError";
 import { IGetUserAuthInfoRequest } from "../../types/general";
 const router = express.Router();
+const moduleName = "plan";
 
-router.get("/simple", auth(), function (req, res) {
+router.get("/simple", auth(moduleName), function (req, res) {
   getPlanes(null, null, true)
     .then((list) => {
       switch (list.status) {
@@ -48,7 +49,7 @@ router.get("/public", function (req, res) {
     });
 });
 
-router.get("/list/:page?/:pattern?", auth(), function (req, res) {
+router.get("/list/:page?/:pattern?", auth(moduleName), function (req, res) {
   getPlanes(req.params.pattern, parseInt(req.params.page), false)
     .then((list) => {
       switch (list.status) {
@@ -66,7 +67,7 @@ router.get("/list/:page?/:pattern?", auth(), function (req, res) {
     });
 });
 
-router.get("/:id", auth(), function (req, res) {
+router.get("/:id", auth(moduleName), function (req, res) {
   getPlan(req.params.id)
     .then((list) => {
       switch (list.status) {
@@ -84,25 +85,29 @@ router.get("/:id", auth(), function (req, res) {
     });
 });
 
-router.post("/", auth(), function (req: IGetUserAuthInfoRequest, res) {
-  addPlan(req.body, req.user, req.user.company)
-    .then((plan) => {
-      switch (plan.status) {
-        case 201:
-          res.status(201).send(plan.message);
-          break;
-        default:
-          controllerError(plan.detail, req, res);
-          break;
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).send("Unexpected Error");
-    });
-});
+router.post(
+  "/",
+  auth(moduleName),
+  function (req: IGetUserAuthInfoRequest, res) {
+    addPlan(req.body, req.user, req.user.company)
+      .then((plan) => {
+        switch (plan.status) {
+          case 201:
+            res.status(201).send(plan.message);
+            break;
+          default:
+            controllerError(plan.detail, req, res);
+            break;
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
 
-router.patch("/", auth(), function (req, res) {
+router.patch("/", auth(moduleName), function (req, res) {
   updatePlan(req.body)
     .then((plan) => {
       switch (plan.status) {
@@ -122,7 +127,7 @@ router.patch("/", auth(), function (req, res) {
     });
 });
 
-router.delete("/:id", auth(), function (req, res) {
+router.delete("/:id", auth(moduleName), function (req, res) {
   deletePlan(req.params.id)
     .then((resp) => {
       switch (resp.status) {

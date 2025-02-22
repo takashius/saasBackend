@@ -34,7 +34,8 @@ const router = express.Router();
 const saveFile_1 = require("../../middleware/saveFile");
 const cloudinary_1 = require("cloudinary");
 const commons_1 = __importDefault(require("../../config/commons"));
-router.get("/", (0, auth_1.default)(), function (req, res) {
+const moduleName = "company";
+router.get("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getCompanies)()
         .then((list) => {
         switch (list.status) {
@@ -51,7 +52,7 @@ router.get("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/myCompany", (0, auth_1.default)(), function (req, res) {
+router.get("/myCompany", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getCompany)(req.user.company.toString())
         .then((data) => {
         switch (data.status) {
@@ -68,7 +69,7 @@ router.get("/myCompany", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/:id", (0, auth_1.default)(), function (req, res) {
+router.get("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getCompany)(req.params.id)
         .then((data) => {
         switch (data.status) {
@@ -85,7 +86,7 @@ router.get("/:id", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.post("/", (0, auth_1.default)(), function (req, res) {
+router.post("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.addCompany)(req.body, req.user._id)
         .then((data) => {
         switch (data.status) {
@@ -103,7 +104,7 @@ router.post("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.post("/upload", saveFile_1.upload.single("image"), (0, auth_1.default)(), function (req, res) {
+router.post("/upload", saveFile_1.upload.single("image"), (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.uploadImage)(req.user.company.toString(), req.body.imageType, req.file)
         .then((data) => {
         switch (data.status) {
@@ -123,7 +124,7 @@ router.post("/upload", saveFile_1.upload.single("image"), (0, auth_1.default)(),
         res.status(500).send("Unexpected Error");
     });
 });
-router.patch("/", (0, auth_1.default)(), function (req, res) {
+router.patch("/", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.updateCompany)(req.body)
         .then((data) => {
         switch (data.status) {
@@ -142,7 +143,7 @@ router.patch("/", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.patch("/config", (0, auth_1.default)(), function (req, res) {
+router.patch("/config", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.configCompany)(req.body, req.user.company, req.file)
         .then((data) => {
         switch (data.status) {
@@ -162,7 +163,7 @@ router.patch("/config", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.delete("/removeImage", (0, auth_1.default)(), function (req, res) {
+router.delete("/removeImage", (0, auth_1.default)(moduleName), function (req, res) {
     const url = req.body.url.split("/");
     const image = url[url.length - 1].split(".");
     cloudinary_1.v2.uploader
@@ -170,7 +171,7 @@ router.delete("/removeImage", (0, auth_1.default)(), function (req, res) {
         .then((result) => res.json(result))
         .catch((error) => res.json(error));
 });
-router.delete("/:id", (0, auth_1.default)(), function (req, res) {
+router.delete("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.deleteCompany)(req.params.id)
         .then((resp) => {
         switch (resp.status) {

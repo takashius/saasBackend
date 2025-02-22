@@ -33,7 +33,7 @@ const controllerError_1 = __importDefault(require("../../middleware/controllerEr
 const router = express.Router();
 const saveFile_1 = require("../../middleware/saveFile");
 const moduleName = "user";
-router.get("/simple", (0, auth_1.default)(), function (req, res) {
+router.get("/simple", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getUsers)(null, null, true)
         .then((list) => {
         switch (list.status) {
@@ -50,7 +50,7 @@ router.get("/simple", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/roles", (0, auth_1.default)(), function (req, res) {
+router.get("/roles", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getRoles)(req.user)
         .then((list) => {
         switch (list.status) {
@@ -67,7 +67,7 @@ router.get("/roles", (0, auth_1.default)(), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/list/:page?/:pattern?", (0, auth_1.default)(), function (req, res) {
+router.get("/list/:page?/:pattern?", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getUsers)(req.params.pattern, parseInt(req.params.page), false, req.user)
         .then((list) => {
         switch (list.status) {

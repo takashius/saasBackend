@@ -32,7 +32,8 @@ const auth_1 = __importDefault(require("../../middleware/auth"));
 const saveFile_1 = require("../../middleware/saveFile");
 const controllerError_1 = __importDefault(require("../../middleware/controllerError"));
 const router = express.Router();
-router.get("/simple", (0, auth_1.default)("post"), function (req, res) {
+const moduleName = "post";
+router.get("/simple", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getPosts)(null, null, true)
         .then((list) => {
         switch (list.status) {
@@ -49,7 +50,7 @@ router.get("/simple", (0, auth_1.default)("post"), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/list/:page?/:pattern?", (0, auth_1.default)("post"), function (req, res) {
+router.get("/list/:page?/:pattern?", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getPosts)(req.params.pattern, parseInt(req.params.page), false)
         .then((list) => {
         switch (list.status) {
@@ -66,7 +67,7 @@ router.get("/list/:page?/:pattern?", (0, auth_1.default)("post"), function (req,
         res.status(500).send("Unexpected Error");
     });
 });
-router.get("/:id", (0, auth_1.default)("post"), function (req, res) {
+router.get("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.getPost)(req.params.id)
         .then((list) => {
         switch (list.status) {
@@ -83,7 +84,7 @@ router.get("/:id", (0, auth_1.default)("post"), function (req, res) {
         res.status(500).send("Unexpected Error");
     });
 });
-router.post("/", (0, auth_1.default)("post"), saveFile_1.upload.single("image"), function (req, res) {
+router.post("/", (0, auth_1.default)(moduleName), saveFile_1.upload.single("image"), function (req, res) {
     console.log(req.user);
     (0, controller_1.addPost)(req.body, req.file, req.user)
         .then((post) => {
@@ -101,7 +102,7 @@ router.post("/", (0, auth_1.default)("post"), saveFile_1.upload.single("image"),
         res.status(500).send("Unexpected Error");
     });
 });
-router.patch("/", (0, auth_1.default)("post"), saveFile_1.upload.single("image"), function (req, res) {
+router.patch("/", (0, auth_1.default)(moduleName), saveFile_1.upload.single("image"), function (req, res) {
     (0, controller_1.updatePost)(req.body, req.file)
         .then((post) => {
         switch (post.status) {
@@ -120,7 +121,7 @@ router.patch("/", (0, auth_1.default)("post"), saveFile_1.upload.single("image")
         res.status(500).send("Unexpected Error");
     });
 });
-router.delete("/:id", (0, auth_1.default)("post"), function (req, res) {
+router.delete("/:id", (0, auth_1.default)(moduleName), function (req, res) {
     (0, controller_1.deletePost)(req.params.id)
         .then((resp) => {
         switch (resp.status) {

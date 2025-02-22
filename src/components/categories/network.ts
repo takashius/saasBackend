@@ -11,8 +11,9 @@ import auth from "../../middleware/auth";
 import { upload } from "../../middleware/saveFile";
 import controllerError from "../../middleware/controllerError";
 const router = express.Router();
+const moduleName = "categories";
 
-router.get("/simple", auth(), function (req, res) {
+router.get("/simple", auth(moduleName), function (req, res) {
   getCategories(null, null, true)
     .then((list) => {
       switch (list.status) {
@@ -48,7 +49,7 @@ router.get("/public", function (req, res) {
     });
 });
 
-router.get("/list/:page?/:pattern?", auth(), function (req, res) {
+router.get("/list/:page?/:pattern?", auth(moduleName), function (req, res) {
   getCategories(req.params.pattern, parseInt(req.params.page), false)
     .then((list) => {
       switch (list.status) {
@@ -66,7 +67,7 @@ router.get("/list/:page?/:pattern?", auth(), function (req, res) {
     });
 });
 
-router.get("/:id", auth(), function (req, res) {
+router.get("/:id", auth(moduleName), function (req, res) {
   getCategory(req.params.id)
     .then((list) => {
       switch (list.status) {
@@ -84,7 +85,7 @@ router.get("/:id", auth(), function (req, res) {
     });
 });
 
-router.post("/", auth(), upload.single("image"), function (req, res) {
+router.post("/", auth(moduleName), upload.single("image"), function (req, res) {
   addCategory(req.body, req.file)
     .then((category) => {
       switch (category.status) {
@@ -102,27 +103,32 @@ router.post("/", auth(), upload.single("image"), function (req, res) {
     });
 });
 
-router.patch("/", auth(), upload.single("image"), function (req, res) {
-  updateCategory(req.body, req.file)
-    .then((category) => {
-      switch (category.status) {
-        case 200:
-          res.status(200).send(category.message);
-          break;
-        case 400:
-          res.status(category.status).send(category.message);
-          break;
-        default:
-          controllerError(category.detail, req, res);
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).send("Unexpected Error");
-    });
-});
+router.patch(
+  "/",
+  auth(moduleName),
+  upload.single("image"),
+  function (req, res) {
+    updateCategory(req.body, req.file)
+      .then((category) => {
+        switch (category.status) {
+          case 200:
+            res.status(200).send(category.message);
+            break;
+          case 400:
+            res.status(category.status).send(category.message);
+            break;
+          default:
+            controllerError(category.detail, req, res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
 
-router.delete("/:id", auth(), function (req, res) {
+router.delete("/:id", auth(moduleName), function (req, res) {
   deleteCategory(req.params.id)
     .then((resp) => {
       switch (resp.status) {
