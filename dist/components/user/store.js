@@ -372,9 +372,9 @@ async function deleteUser(id) {
 async function loginUser(mail, pass) {
     try {
         const user = await model_1.User.findByCredentials(mail, pass);
-        const { _id, name, lastName, photo, email, date } = user;
+        const { _id, name, lastName, photo, email, date, role } = user;
         const token = await user.generateAuthToken();
-        const response = { _id, name, lastName, photo, email, date, token };
+        const response = { _id, name, lastName, photo, email, date, role, token };
         return { status: 200, message: response };
     }
     catch (error) {

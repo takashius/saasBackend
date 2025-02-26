@@ -134,7 +134,9 @@ userSchema.statics.findByCredentials = async (email, password) => {
   if (!validator.isEmail(email)) {
     throw new Error("Invalid login credentials");
   }
-  const user = await User.findOne({ email, active: true }).select("-__v");
+  const user = await User.findOne({ email, active: true })
+    .select("-__v")
+    .populate("role");
 
   if (!user) {
     throw new Error("Invalid login credentials");
