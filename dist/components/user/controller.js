@@ -70,14 +70,9 @@ async function getUsers(filter, page, simple, user) {
             });
         }
         else {
-            if (user) {
-                const roles = user.role;
-                if (roles.includes("SUPER_ADMIN")) {
-                    result = await (0, store_1.getPaginate)(filter, page);
-                }
-                else {
-                    result = await (0, store_1.getPaginate)(filter, page, user.company);
-                }
+            const roles = user.role;
+            if (roles.includes("SUPER_ADMIN")) {
+                result = await (0, store_1.getPaginate)(filter, page);
             }
             else {
                 result = await (0, store_1.getPaginate)(filter, page, user.company);

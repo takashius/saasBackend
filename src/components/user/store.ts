@@ -139,7 +139,10 @@ export async function getPaginate(
     let select = "";
 
     if (companyId) {
-      query = { "companies.company": companyId, active: true };
+      query = {
+        "companies.company": companyId,
+        active: true,
+      };
     }
 
     if (filter) {
@@ -153,6 +156,10 @@ export async function getPaginate(
     select = "id name lastName phone email photo date";
 
     const result = await User.find(query)
+      .populate({
+        path: "role",
+        match: companyId ? { name: { $ne: "SUPER_ADMIN" } } : {},
+      })
       .select(select)
       .limit(limit * 1)
       .skip((page - 1) * limit)
@@ -160,7 +167,11 @@ export async function getPaginate(
         name: "asc",
       });
 
-    result.map((item) => {
+    const filteredResult = result.filter(
+      (item) => !companyId || (item.role && item.role.length > 0)
+    );
+
+    filteredResult.map((item) => {
       data.push({
         _id: item._id,
         fullName: `${item.name} ${item.lastName}`,

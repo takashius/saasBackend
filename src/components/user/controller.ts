@@ -49,13 +49,9 @@ export async function getUsers(
         });
       });
     } else {
-      if (user) {
-        const roles = user.role;
-        if (roles.includes("SUPER_ADMIN")) {
-          result = await getPaginate(filter, page);
-        } else {
-          result = await getPaginate(filter, page, user.company);
-        }
+      const roles = user.role;
+      if (roles.includes("SUPER_ADMIN")) {
+        result = await getPaginate(filter, page);
       } else {
         result = await getPaginate(filter, page, user.company);
       }
