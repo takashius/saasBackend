@@ -6,7 +6,7 @@ import { removeImage } from "../../middleware/saveFile";
 import { UserResponse, CompanyResponse, RequestUser } from "../../types/users";
 import { StoreResponse } from "../../types/general";
 import { toUserResponse } from "../../utils/userParser";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import moment from "moment";
 import RoleGroup from "../roles/model";
 
@@ -556,7 +556,7 @@ export async function removeCompany(
 }
 
 export async function selectCompany(
-  userId: string,
+  userId: ObjectId,
   company: string
 ): Promise<StoreResponse> {
   try {

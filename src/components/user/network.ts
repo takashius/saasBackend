@@ -400,25 +400,29 @@ router.patch(
   }
 );
 
-router.patch("/select_company", auth(moduleName), function (req, res) {
-  selectCompany(req.body.user, req.body.company)
-    .then((user) => {
-      switch (user.status) {
-        case 200:
-          res.status(200).send(user.message);
-          break;
-        case 400:
-          res.status(user.status).send(user.message);
-          break;
-        default:
-          controllerError(user.detail, req, res);
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).send("Unexpected Error");
-    });
-});
+router.patch(
+  "/select_company",
+  auth(moduleName),
+  function (req: IGetUserAuthInfoRequest, res) {
+    selectCompany(req.user._id, req.body.company)
+      .then((user) => {
+        switch (user.status) {
+          case 200:
+            res.status(200).send(user.message);
+            break;
+          case 400:
+            res.status(user.status).send(user.message);
+            break;
+          default:
+            controllerError(user.detail, req, res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send("Unexpected Error");
+      });
+  }
+);
 
 router.post("/login", async (req, res) => {
   loginUser(req.body)

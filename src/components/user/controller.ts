@@ -24,6 +24,7 @@ import config from "../../config/commons";
 import { mailer } from "../../middleware/mailer";
 import { getCompany } from "../company/store";
 import * as validator from "email-validator";
+import { ObjectId } from "mongoose";
 
 export async function getUsers(
   filter: string,
@@ -272,7 +273,7 @@ export async function removeCompany(user: string, company: string) {
   }
 }
 
-export async function selectCompany(user: string, company: string) {
+export async function selectCompany(user: any, company: string) {
   try {
     const fullUser = await _selectCompany(user, company);
     return fullUser;

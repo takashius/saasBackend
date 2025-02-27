@@ -344,7 +344,7 @@ router.patch("/updateRoles", (0, auth_1.default)(moduleName), function (req, res
     });
 });
 router.patch("/select_company", (0, auth_1.default)(moduleName), function (req, res) {
-    (0, controller_1.selectCompany)(req.body.user, req.body.company)
+    (0, controller_1.selectCompany)(req.user._id, req.body.company)
         .then((user) => {
         switch (user.status) {
             case 200:
